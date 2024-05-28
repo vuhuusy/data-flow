@@ -105,6 +105,8 @@ services:
       - ./volumes/nifi0-data:/opt/nifi/nifi-current/content_repository
       - ./volumes/nifi0-data:/opt/nifi/nifi-current/database_repository
       - ./volumes/nifi0-data:/opt/nifi/nifi-current/provenance_repository
+      - ./volumes/nifi0-data:/opt/nifi/nifi-current/state
+      - ./volumes/nifi0-data:/opt/nifi/nifi-current/conf
       - ./volumes/core-site.xml:/opt/nifi/nifi-current/hadoop-conf/core-site.xml
       - ./volumes/hdfs-site.xml:/opt/nifi/nifi-current/hadoop-conf/hdfs-site.xml
     networks:
@@ -134,6 +136,8 @@ services:
       - ./volumes/nifi1-data:/opt/nifi/nifi-current/content_repository
       - ./volumes/nifi1-data:/opt/nifi/nifi-current/database_repository
       - ./volumes/nifi1-data:/opt/nifi/nifi-current/provenance_repository
+      - ./volumes/nifi1-data:/opt/nifi/nifi-current/state
+      - ./volumes/nifi1-data:/opt/nifi/nifi-current/conf
       - ./volumes/core-site.xml:/opt/nifi/nifi-current/hadoop-conf/core-site.xml
       - ./volumes/hdfs-site.xml:/opt/nifi/nifi-current/hadoop-conf/hdfs-site.xml
     networks:
