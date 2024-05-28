@@ -1,10 +1,18 @@
-version: '3'
+version: '2'
 
 services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
+    restart: on-failure:10
+    hostname: zookeeper
     container_name: zookeeper
+    healthcheck:
+      test: echo srvr | nc zookeeper 2181 || exit 1
+      retries: 10
+      interval: 20s
+    ports:
+      - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -12,70 +20,74 @@ services:
       - ./volume/zk-data:/var/lib/zookeeper/data
       - ./volume/zk-txn-logs:/var/lib/zookeeper/log
     networks:
-      - kafka-nifi-schemaregistry
+      - data-flow
+
+  kafka0:
+    image: confluentinc/cp-kafka:7.6.1
+    hostname: kafka0
+    container_name: kafka0
+    restart: on-failure:10
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka0:29092,LISTENER_DOCKER_EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'LISTENER_DOCKER_INTERNAL'
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./volume/kafka0-data:/var/lib/kafka/data
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    networks:
+      - data-flow
 
   kafka1:
     image: confluentinc/cp-kafka:7.6.1
     container_name: kafka1
     hostname: kafka1
+    restart: on-failure:10
     ports:
       - "9091:9091"
-
     environment:
-      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka1:19091,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9091
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka1:29091,LISTENER_DOCKER_EXTERNAL://localhost:9091
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_BROKER_ID: 1
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'LISTENER_DOCKER_INTERNAL'
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_BROKER_ID: 2
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
       - ./volume/kafka1-data:/var/lib/kafka/data
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy
     networks:
-      - kafka-nifi-schemaregistry
-
-  kafka2:
-    image: confluentinc/cp-kafka:7.6.1
-    container_name: kafka2
-    hostname: kafka2
-    ports:
-      - "9089:9089"
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka2:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_BROKER_ID: 2
-    volumes:
-      - ./volume/kafka2-data:/var/lib/kafka/data
-    depends_on:
-      - zookeeper
-    networks:
-      - kafka-nifi-schemaregistry
+      - data-flow
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.6.1
     container_name: schema-registry
     hostname: schema-registry
     ports:
-      - 8085:8085
+      - "8085:8085"
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8085
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:19091,kafka2:19092
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka0:29092,kafka1:29091
     depends_on:
+      - kafka0
       - kafka1
-      - kafka2
     networks:
-      - kafka-nifi-schemaregistry
+      - data-flow
 
-  nifi1:
+  nifi0:
     image: apache/nifi:1.26.0
-    container_name: nifi1
-    hostname: nifi1
+    container_name: nifi0
+    hostname: nifi0
     ports:
-      - 6980:8080
+      - "6980:8080"
     environment:
       - NIFI_WEB_HTTP_PORT=8080
       - NIFI_CLUSTER_IS_NODE=true
@@ -85,8 +97,34 @@ services:
       - NIFI_SENSITIVE_PROPS_KEY=MySuperSecretKey
     depends_on:
       - zookeeper
+      - kafka0
       - kafka1
-      - kafka2
+      - schema-registry
+    volumes:
+      - ./volume/nifi0-data:/opt/nifi/nifi-current/flowfile_repository
+      - ./volume/nifi0-data:/opt/nifi/nifi-current/content_repository
+      - ./volume/nifi0-data:/opt/nifi/nifi-current/database_repository
+      - ./volume/nifi0-data:/opt/nifi/nifi-current/provenance_repository
+    networks:
+      - data-flow
+
+  nifi1:
+    image: apache/nifi:1.26.0
+    container_name: nifi1
+    hostname: nifi1
+    ports:
+      - "6979:8080"
+    environment:
+      - NIFI_WEB_HTTP_PORT=8080
+      - NIFI_CLUSTER_IS_NODE=true
+      - NIFI_CLUSTER_NODE_PROTOCOL_PORT=8082
+      - NIFI_ZK_CONNECT_STRING=zookeeper:2181
+      - NIFI_ELECTION_MAX_WAIT=1 min
+      - NIFI_SENSITIVE_PROPS_KEY=MySuperSecretKey
+    depends_on:
+      - zookeeper
+      - kafka0
+      - kafka1
       - schema-registry
     volumes:
       - ./volume/nifi1-data:/opt/nifi/nifi-current/flowfile_repository
@@ -94,34 +132,8 @@ services:
       - ./volume/nifi1-data:/opt/nifi/nifi-current/database_repository
       - ./volume/nifi1-data:/opt/nifi/nifi-current/provenance_repository
     networks:
-      - kafka-nifi-schemaregistry
-
-  nifi2:
-    image: apache/nifi:1.26.0
-    container_name: nifi2
-    hostname: nifi2
-    ports:
-      - 6979:8080
-    environment:
-      - NIFI_WEB_HTTP_PORT=8080
-      - NIFI_CLUSTER_IS_NODE=true
-      - NIFI_CLUSTER_NODE_PROTOCOL_PORT=8082
-      - NIFI_ZK_CONNECT_STRING=zookeeper:2181
-      - NIFI_ELECTION_MAX_WAIT=1 min
-      - NIFI_SENSITIVE_PROPS_KEY=MySuperSecretKey
-    depends_on:
-      - zookeeper
-      - kafka1
-      - kafka2
-      - schema-registry
-    volumes:
-      - ./volume/nifi2-data:/opt/nifi/nifi-current/flowfile_repository
-      - ./volume/nifi2-data:/opt/nifi/nifi-current/content_repository
-      - ./volume/nifi2-data:/opt/nifi/nifi-current/database_repository
-      - ./volume/nifi2-data:/opt/nifi/nifi-current/provenance_repository
-    networks:
-      - kafka-nifi-schemaregistry
+      - data-flow
       
 networks:
-  kafka-nifi-schemaregistry:
+  data-flow:
     driver: bridge
