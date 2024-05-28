@@ -20,7 +20,7 @@ services:
       - ./volume/zk-data:/var/lib/zookeeper/data
       - ./volume/zk-txn-logs:/var/lib/zookeeper/log
     networks:
-      - data-flow
+      - kafka-nifi
 
   kafka0:
     image: confluentinc/cp-kafka:7.6.1
@@ -42,7 +42,7 @@ services:
       zookeeper:
         condition: service_healthy
     networks:
-      - data-flow
+      - kafka-nifi
 
   kafka1:
     image: confluentinc/cp-kafka:7.6.1
@@ -64,7 +64,7 @@ services:
       zookeeper:
         condition: service_healthy
     networks:
-      - data-flow
+      - kafka-nifi
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.6.1
@@ -80,7 +80,7 @@ services:
       - kafka0
       - kafka1
     networks:
-      - data-flow
+      - kafka-nifi
 
   nifi0:
     image: apache/nifi:1.26.0
@@ -105,8 +105,11 @@ services:
       - ./volume/nifi0-data:/opt/nifi/nifi-current/content_repository
       - ./volume/nifi0-data:/opt/nifi/nifi-current/database_repository
       - ./volume/nifi0-data:/opt/nifi/nifi-current/provenance_repository
+      - ./volume/core-site.xml:/opt/nifi/nifi-current/hadoop-conf/core-site.xml
+      - ./volume/hdfs-site.xml:/opt/nifi/nifi-current/hadoop-conf/hdfs-site.xml
     networks:
-      - data-flow
+      - kafka-nifi
+      - nifi-hadoop
 
   nifi1:
     image: apache/nifi:1.26.0
@@ -131,8 +134,11 @@ services:
       - ./volume/nifi1-data:/opt/nifi/nifi-current/content_repository
       - ./volume/nifi1-data:/opt/nifi/nifi-current/database_repository
       - ./volume/nifi1-data:/opt/nifi/nifi-current/provenance_repository
+      - ./volume/core-site.xml:/opt/nifi/nifi-current/hadoop-conf/core-site.xml
+      - ./volume/hdfs-site.xml:/opt/nifi/nifi-current/hadoop-conf/hdfs-site.xml
     networks:
-      - data-flow
+      - kafka-nifi
+      - nifi-hadoop
       
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
@@ -148,6 +154,8 @@ services:
       - CLUSTER_NAME=data-flow
     env_file:
       - ./hadoop.env
+    networks:
+      - nifi-hadoop
 
   datanode1:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
@@ -159,6 +167,8 @@ services:
       SERVICE_PRECONDITION: "namenode:9870"
     env_file:
       - ./hadoop.env
+    networks:
+      - nifi-hadoop
   
   resourcemanager:
     image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
@@ -170,6 +180,8 @@ services:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864"
     env_file:
       - ./hadoop.env
+    networks:
+      - nifi-hadoop
 
   nodemanager1:
     image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
@@ -179,6 +191,8 @@ services:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 resourcemanager:8088"
     env_file:
       - ./hadoop.env
+    networks:
+      - nifi-hadoop
   
   historyserver:
     image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
@@ -190,7 +204,11 @@ services:
       - ./hadoop-volume/hadoop_historyserver:/hadoop/yarn/timeline
     env_file:
       - ./hadoop.env
+    networks:
+      - nifi-hadoop
       
 networks:
-  data-flow:
+  kafka-nifi:
+    driver: bridge
+  nifi-hadoop:
     driver: bridge
