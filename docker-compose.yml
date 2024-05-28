@@ -153,7 +153,7 @@ services:
       - "9000:9000"
     volumes:
       - ./hadoop-volume/hadoop_namenode:/hadoop/dfs/name
-      - $PWD/hadoop_home:/home
+      - ./hadoop-volume/hadoop_home:/home
     environment:
       - CLUSTER_NAME=data-flow
     env_file:
