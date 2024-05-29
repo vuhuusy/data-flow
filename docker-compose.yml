@@ -146,10 +146,12 @@ services:
       - hadoop_home:/home
     environment:
       - CLUSTER_NAME=data-flow
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
     env_file:
       - ./hadoop_conf/hadoop.env
     networks:
       - nifi-hadoop
+      - hadoop-spark
 
   datanode1:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
@@ -159,10 +161,12 @@ services:
       - hadoop_datanode1:/hadoop/dfs/data
     environment:
       SERVICE_PRECONDITION: "namenode:9870"
+      CORE_CONF_fs_defaultFS: "hdfs://namenode:9000"
     env_file:
       - ./hadoop_conf/hadoop.env
     networks:
       - nifi-hadoop
+      - hadoop-spark
   
   resourcemanager:
     image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
@@ -176,6 +180,7 @@ services:
       - ./hadoop_conf/hadoop.env
     networks:
       - nifi-hadoop
+      - hadoop-spark
 
   nodemanager1:
     image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
@@ -187,6 +192,7 @@ services:
       - ./hadoop_conf/hadoop.env
     networks:
       - nifi-hadoop
+      - hadoop-spark
   
   historyserver:
     image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
@@ -200,6 +206,35 @@ services:
       - ./hadoop_conf/hadoop.env
     networks:
       - nifi-hadoop
+      - hadoop-spark
+
+  spark-master:
+    image: bde2020/spark-master:3.0.0-hadoop3.2
+    container_name: spark-master
+    depends_on:
+      - namenode
+      - datanode1
+    ports:
+      - "8090:8090"
+      - "7077:7077"
+    environment:
+      - INIT_DAEMON_STEP=setup_spark
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+    networks:
+      - hadoop-spark
+
+  spark-worker-1:
+    image: bde2020/spark-worker:3.0.0-hadoop3.2
+    container_name: spark-worker-1
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"
+    environment:
+      - "SPARK_MASTER=spark://spark-master:7077"
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+    networks:
+      - hadoop-spark
       
 volumes:
   zk-data:
@@ -217,4 +252,6 @@ networks:
   kafka-nifi:
     driver: bridge
   nifi-hadoop:
+    driver: bridge
+  hadoop-spark:
     driver: bridge
