@@ -1,5 +1,6 @@
 services:
 
+  ####### ZOOKEEPER
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
     restart: on-failure:10
@@ -20,10 +21,11 @@ services:
     networks:
       - kafka-nifi
 
+  ####### KAFKA
   kafka0:
     image: confluentinc/cp-kafka:7.6.1
-    hostname: kafka0
     container_name: kafka0
+    hostname: kafka0
     restart: on-failure:10
     ports:
       - "9092:9092"
@@ -80,6 +82,7 @@ services:
     networks:
       - kafka-nifi
 
+  ####### NIFI
   nifi0:
     image: apache/nifi:1.26.0
     container_name: nifi0
@@ -101,8 +104,8 @@ services:
       - nifi0-data:/opt/nifi/nifi-current/content_repository
       - nifi0-data:/opt/nifi/nifi-current/database_repository
       - nifi0-data:/opt/nifi/nifi-current/provenance_repository
-      - ./hadoop_conf/core-site.xml:/opt/nifi/nifi-current/core-site.xml
-      - ./hadoop_conf/hdfs-site.xml:/opt/nifi/nifi-current/hdfs-site.xml
+      - ./hadoop/core-site.xml:/opt/nifi/nifi-current/core-site.xml
+      - ./hadoop/hdfs-site.xml:/opt/nifi/nifi-current/hdfs-site.xml
     networks:
       - kafka-nifi
       - nifi-hadoop
@@ -128,12 +131,13 @@ services:
       - nifi1-data:/opt/nifi/nifi-current/content_repository
       - nifi1-data:/opt/nifi/nifi-current/database_repository
       - nifi1-data:/opt/nifi/nifi-current/provenance_repository
-      - ./hadoop_conf/core-site.xml:/opt/nifi/nifi-current/core-site.xml
-      - ./hadoop_conf/hdfs-site.xml:/opt/nifi/nifi-current/hdfs-site.xml
+      - ./hadoop/core-site.xml:/opt/nifi/nifi-current/core-site.xml
+      - ./hadoop/hdfs-site.xml:/opt/nifi/nifi-current/hdfs-site.xml
     networks:
       - kafka-nifi
       - nifi-hadoop
-      
+
+  ####### HADOOP    
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
     container_name: namenode
@@ -146,10 +150,12 @@ services:
       - hadoop_home:/home
     environment:
       - CLUSTER_NAME=data-flow
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
     env_file:
-      - ./hadoop_conf/hadoop.env
+      - ./hadoop/hadoop.env
     networks:
       - nifi-hadoop
+      - hadoop-spark
 
   datanode1:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
@@ -159,10 +165,27 @@ services:
       - hadoop_datanode1:/hadoop/dfs/data
     environment:
       SERVICE_PRECONDITION: "namenode:9870"
+      CORE_CONF_fs_defaultFS: "hdfs://namenode:9000"
     env_file:
-      - ./hadoop_conf/hadoop.env
+      - ./hadoop/hadoop.env
     networks:
       - nifi-hadoop
+      - hadoop-spark
+
+  datanode2:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode2
+    restart: on-failure:10
+    volumes:
+      - hadoop_datanode2:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+      CORE_CONF_fs_defaultFS: "hdfs://namenode:9000"
+    env_file:
+      - ./hadoop/hadoop.env
+    networks:
+      - nifi-hadoop
+      - hadoop-spark
   
   resourcemanager:
     image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
@@ -171,36 +194,80 @@ services:
     ports:
       - "8088:8088"
     environment:
-      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864"
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 datanode2:9864"
     env_file:
-      - ./hadoop_conf/hadoop.env
+      - ./hadoop/hadoop.env
     networks:
       - nifi-hadoop
+      - hadoop-spark
 
   nodemanager1:
     image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
     container_name: nodemanager
     restart: on-failure:10
     environment:
-      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 resourcemanager:8088"
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 datanode2:9864 resourcemanager:8088"
     env_file:
-      - ./hadoop_conf/hadoop.env
+      - ./hadoop/hadoop.env
     networks:
       - nifi-hadoop
+      - hadoop-spark
   
   historyserver:
     image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
     container_name: historyserver
     restart: on-failure:10
     environment:
-      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 resourcemanager:8088"
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 datanode2:9864 resourcemanager:8088"
     volumes:
       - hadoop_historyserver:/hadoop/yarn/timeline
     env_file:
-      - ./hadoop_conf/hadoop.env
+      - ./hadoop/hadoop.env
     networks:
       - nifi-hadoop
+      - hadoop-spark
+
+  ####### SPARK
+  spark-master:
+    image: bde2020/spark-master:3.0.0-hadoop3.2
+    container_name: spark-master
+    depends_on:
+      - namenode
+      - datanode1
+    ports:
+      - "8090:8090"
+      - "7077:7077"
+    environment:
+      - INIT_DAEMON_STEP=setup_spark
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+    networks:
+      - hadoop-spark
+
+  spark-worker-1:
+    image: bde2020/spark-worker:3.0.0-hadoop3.2
+    container_name: spark-worker-1
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"
+    environment:
+      - "SPARK_MASTER=spark://spark-master:7077"
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+    networks:
+      - hadoop-spark
       
+  ####### JUPYTER      
+  jupyter-notebook:
+    build: ./jupyter
+    container_name: jupyter-notebook
+    ports:
+      - "8888:8888"
+      - "4040:4040"
+    volumes:
+      - shared-workspace:/opt/workspace
+    networks:
+     - hadoop-spark
+
 volumes:
   zk-data:
   zk-txn-logs:
@@ -211,10 +278,14 @@ volumes:
   hadoop_namenode:
   hadoop_home:
   hadoop_datanode1:
+  hadoop_datanode2:
   hadoop_historyserver:
+  shared-workspace:
 
 networks:
   kafka-nifi:
     driver: bridge
   nifi-hadoop:
+    driver: bridge
+  hadoop-spark:
     driver: bridge
