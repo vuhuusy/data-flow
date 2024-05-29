@@ -1,5 +1,3 @@
-version: '2'
-
 services:
 
   zookeeper:
@@ -17,8 +15,8 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     volumes:
-      - ./volumes/zk-data:/var/lib/zookeeper/data
-      - ./volumes/zk-txn-logs:/var/lib/zookeeper/log
+      - zk-data:/var/lib/zookeeper/data
+      - zk-txn-logs:/var/lib/zookeeper/log
     networks:
       - kafka-nifi
 
@@ -37,7 +35,7 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
-      - ./volumes/kafka0-data:/var/lib/kafka/data
+      - kafka0-data:/var/lib/kafka/data
     depends_on:
       zookeeper:
         condition: service_healthy
@@ -59,7 +57,7 @@ services:
       KAFKA_BROKER_ID: 2
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
-      - ./volumes/kafka1-data:/var/lib/kafka/data
+      - kafka1-data:/var/lib/kafka/data
     depends_on:
       zookeeper:
         condition: service_healthy
@@ -86,6 +84,7 @@ services:
     image: apache/nifi:1.26.0
     container_name: nifi0
     hostname: nifi0
+    restart: on-failure:10
     ports:
       - "6980:8080"
     environment:
@@ -96,19 +95,14 @@ services:
       - NIFI_ELECTION_MAX_WAIT=1 min
       - NIFI_SENSITIVE_PROPS_KEY=MySuperSecretKey
     depends_on:
-      - zookeeper
-      - kafka0
-      - kafka1
       - schema-registry
     volumes:
-      - ./volumes/nifi0-data:/opt/nifi/nifi-current/flowfile_repository
-      - ./volumes/nifi0-data:/opt/nifi/nifi-current/content_repository
-      - ./volumes/nifi0-data:/opt/nifi/nifi-current/database_repository
-      - ./volumes/nifi0-data:/opt/nifi/nifi-current/provenance_repository
-      - ./volumes/nifi0-data:/opt/nifi/nifi-current/state
-      - ./volumes/nifi0-data:/opt/nifi/nifi-current/conf
-      - ./volumes/core-site.xml:/opt/nifi/nifi-current/hadoop-conf/core-site.xml
-      - ./volumes/hdfs-site.xml:/opt/nifi/nifi-current/hadoop-conf/hdfs-site.xml
+      - nifi0-data:/opt/nifi/nifi-current/flowfile_repository
+      - nifi0-data:/opt/nifi/nifi-current/content_repository
+      - nifi0-data:/opt/nifi/nifi-current/database_repository
+      - nifi0-data:/opt/nifi/nifi-current/provenance_repository
+      - ./hadoop_conf/core-site.xml:/opt/nifi/nifi-current/core-site.xml
+      - ./hadoop_conf/hdfs-site.xml:/opt/nifi/nifi-current/hdfs-site.xml
     networks:
       - kafka-nifi
       - nifi-hadoop
@@ -117,6 +111,7 @@ services:
     image: apache/nifi:1.26.0
     container_name: nifi1
     hostname: nifi1
+    restart: on-failure:10
     ports:
       - "6979:8080"
     environment:
@@ -127,19 +122,14 @@ services:
       - NIFI_ELECTION_MAX_WAIT=1 min
       - NIFI_SENSITIVE_PROPS_KEY=MySuperSecretKey
     depends_on:
-      - zookeeper
-      - kafka0
-      - kafka1
       - schema-registry
     volumes:
-      - ./volumes/nifi1-data:/opt/nifi/nifi-current/flowfile_repository
-      - ./volumes/nifi1-data:/opt/nifi/nifi-current/content_repository
-      - ./volumes/nifi1-data:/opt/nifi/nifi-current/database_repository
-      - ./volumes/nifi1-data:/opt/nifi/nifi-current/provenance_repository
-      - ./volumes/nifi1-data:/opt/nifi/nifi-current/state
-      - ./volumes/nifi1-data:/opt/nifi/nifi-current/conf
-      - ./volumes/core-site.xml:/opt/nifi/nifi-current/hadoop-conf/core-site.xml
-      - ./volumes/hdfs-site.xml:/opt/nifi/nifi-current/hadoop-conf/hdfs-site.xml
+      - nifi1-data:/opt/nifi/nifi-current/flowfile_repository
+      - nifi1-data:/opt/nifi/nifi-current/content_repository
+      - nifi1-data:/opt/nifi/nifi-current/database_repository
+      - nifi1-data:/opt/nifi/nifi-current/provenance_repository
+      - ./hadoop_conf/core-site.xml:/opt/nifi/nifi-current/core-site.xml
+      - ./hadoop_conf/hdfs-site.xml:/opt/nifi/nifi-current/hdfs-site.xml
     networks:
       - kafka-nifi
       - nifi-hadoop
@@ -152,12 +142,12 @@ services:
       - "9870:9870"
       - "9000:9000"
     volumes:
-      - ./hadoop-volume/hadoop_namenode:/hadoop/dfs/name
-      - ./hadoop-volume/hadoop_home:/home
+      - hadoop_namenode:/hadoop/dfs/name
+      - hadoop_home:/home
     environment:
       - CLUSTER_NAME=data-flow
     env_file:
-      - ./hadoop.env
+      - ./hadoop_conf/hadoop.env
     networks:
       - nifi-hadoop
 
@@ -166,11 +156,11 @@ services:
     container_name: datanode1
     restart: on-failure:10
     volumes:
-      - ./hadoop-volume/hadoop_datanode1:/hadoop/dfs/data
+      - hadoop_datanode1:/hadoop/dfs/data
     environment:
       SERVICE_PRECONDITION: "namenode:9870"
     env_file:
-      - ./hadoop.env
+      - ./hadoop_conf/hadoop.env
     networks:
       - nifi-hadoop
   
@@ -183,7 +173,7 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864"
     env_file:
-      - ./hadoop.env
+      - ./hadoop_conf/hadoop.env
     networks:
       - nifi-hadoop
 
@@ -194,7 +184,7 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 resourcemanager:8088"
     env_file:
-      - ./hadoop.env
+      - ./hadoop_conf/hadoop.env
     networks:
       - nifi-hadoop
   
@@ -205,12 +195,24 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 resourcemanager:8088"
     volumes:
-      - ./hadoop-volume/hadoop_historyserver:/hadoop/yarn/timeline
+      - hadoop_historyserver:/hadoop/yarn/timeline
     env_file:
-      - ./hadoop.env
+      - ./hadoop_conf/hadoop.env
     networks:
       - nifi-hadoop
       
+volumes:
+  zk-data:
+  zk-txn-logs:
+  kafka0-data:
+  kafka1-data:
+  nifi0-data:
+  nifi1-data:
+  hadoop_namenode:
+  hadoop_home:
+  hadoop_datanode1:
+  hadoop_historyserver:
+
 networks:
   kafka-nifi:
     driver: bridge
