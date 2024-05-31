@@ -258,11 +258,14 @@ services:
       
   ####### JUPYTER      
   jupyter-notebook:
-    build: ./jupyter
+    image: huusy/jupyter-notebook:latest
     container_name: jupyter-notebook
     ports:
       - "8888:8888"
       - "4040:4040"
+    depends_on:
+      - spark-master
+      - spark-worker-1
     volumes:
       - shared-workspace:/opt/workspace
     networks:
