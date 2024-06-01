@@ -1,5 +1,3 @@
-note.txt
-volumes/
-hadoop-volume/
+note.MD
 vars/
-data/
+venv/
