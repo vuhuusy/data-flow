@@ -3,7 +3,7 @@ services:
   ####### ZOOKEEPER
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
-    restart: on-failure:10
+    restart: unless-stopped
     hostname: zookeeper
     container_name: zookeeper
     healthcheck:
@@ -28,7 +28,7 @@ services:
     image: confluentinc/cp-kafka:7.6.1
     container_name: kafka0
     hostname: kafka0
-    restart: on-failure:10
+    restart: unless-stopped
     ports:
       - "9092:9092"
     environment:
@@ -62,7 +62,7 @@ services:
     image: confluentinc/cp-kafka:7.6.1
     container_name: kafka1
     hostname: kafka1
-    restart: on-failure:10
+    restart: unless-stopped
     ports:
       - "9091:9091"
     environment:
@@ -147,7 +147,7 @@ services:
     image: apache/nifi:1.26.0
     container_name: nifi0
     hostname: nifi0
-    restart: on-failure:10
+    restart: unless-stopped
     ports:
       - "6980:8080"
     environment:
@@ -175,7 +175,7 @@ services:
     image: apache/nifi:1.26.0
     container_name: nifi1
     hostname: nifi1
-    restart: on-failure:10
+    restart: unless-stopped
     ports:
       - "6979:8080"
     environment:
@@ -203,7 +203,7 @@ services:
   namenode:
     image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
     container_name: namenode
-    restart: on-failure:10
+    restart: unless-stopped
     ports:
       - "9870:9870"
       - "9000:9000"
@@ -222,7 +222,7 @@ services:
   datanode1:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
     container_name: datanode1
-    restart: on-failure:10
+    restart: unless-stopped
     volumes:
       - hadoop_datanode1:/hadoop/dfs/data
     environment:
@@ -237,7 +237,7 @@ services:
   datanode2:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
     container_name: datanode2
-    restart: on-failure:10
+    restart: unless-stopped
     volumes:
       - hadoop_datanode2:/hadoop/dfs/data
     environment:
@@ -252,7 +252,7 @@ services:
   resourcemanager:
     image: bde2020/hadoop-resourcemanager:2.0.0-hadoop3.2.1-java8
     container_name: resourcemanager
-    restart: on-failure:10
+    restart: unless-stopped
     ports:
       - "8088:8088"
     environment:
@@ -266,7 +266,7 @@ services:
   nodemanager1:
     image: bde2020/hadoop-nodemanager:2.0.0-hadoop3.2.1-java8
     container_name: nodemanager
-    restart: on-failure:10
+    restart: unless-stopped
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 datanode2:9864 resourcemanager:8088"
     env_file:
@@ -278,7 +278,7 @@ services:
   historyserver:
     image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
     container_name: historyserver
-    restart: on-failure:10
+    restart: unless-stopped
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 datanode2:9864 resourcemanager:8088"
     volumes:
