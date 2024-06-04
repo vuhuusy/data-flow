@@ -5,7 +5,7 @@ ARG scala_version="2.12.10"
 ARG build_date
 ARG shared_workspace=/opt/workspace
 
-RUN mkdir -p ${shared_workspace}/data
+RUN mkdir -p ${shared_workspace}
 RUN mkdir -p /usr/share/man/man1
 RUN apt-get update -y
 RUN apt-get install -y curl python3 r-base
