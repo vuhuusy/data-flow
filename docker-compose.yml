@@ -166,7 +166,7 @@ services:
       - nifi0-data:/opt/nifi/nifi-current/provenance_repository
       - ./hadoop/core-site.xml:/opt/nifi/nifi-current/core-site.xml
       - ./hadoop/hdfs-site.xml:/opt/nifi/nifi-current/hdfs-site.xml
-      - ./kafka-producer/danh_sach_sv_de.csv:/opt/nifi/nifi-current/data/danh_sach_sv_de.csv
+      - ./kafka-producer/data/danh_sach_sv_de.csv:/opt/nifi/nifi-current/data/danh_sach_sv_de.csv
     networks:
       - kafka-nifi
       - nifi-hadoop
@@ -194,7 +194,7 @@ services:
       - nifi1-data:/opt/nifi/nifi-current/provenance_repository
       - ./hadoop/core-site.xml:/opt/nifi/nifi-current/core-site.xml
       - ./hadoop/hdfs-site.xml:/opt/nifi/nifi-current/hdfs-site.xml
-      - ./kafka-producer/danh_sach_sv_de.csv:/opt/nifi/nifi-current/data/danh_sach_sv_de.csv
+      - ./kafka-producer/data/danh_sach_sv_de.csv:/opt/nifi/nifi-current/data/danh_sach_sv_de.csv
     networks:
       - kafka-nifi
       - nifi-hadoop

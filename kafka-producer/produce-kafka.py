@@ -12,7 +12,7 @@ producer = Producer(**conf)
 topic_name = 'vdt2024'
 
 # Đường dẫn tới file CSV
-csv_file_path = './log_action.csv'
+csv_file_path = './data/log_action.csv'
 
 def delivery_report(err, msg):
     """
