@@ -1,9 +1,12 @@
 import csv
 import time
-from kafka import KafkaProducer
+from confluent_kafka import Producer
 
 # Thiết lập Kafka Producer
-producer = KafkaProducer(bootstrap_servers=['localhost:9092', 'localhost:9091'])
+conf = {
+    'bootstrap.servers': 'localhost:9092,localhost:9091'
+}
+producer = Producer(**conf)
 
 # Tên Kafka Topic
 topic_name = 'vdt2024'
@@ -11,12 +14,21 @@ topic_name = 'vdt2024'
 # Đường dẫn tới file CSV
 csv_file_path = './log_action.csv'
 
+def delivery_report(err, msg):
+    """
+    Callback khi nhận được phản hồi từ Kafka
+    """
+    if err is not None:
+        print(f"Message delivery failed: {err}")
+    else:
+        print(f"Message delivered to {msg.topic()} [{msg.partition()}]")
+
 def send_to_kafka(producer, topic, message):
     """
     Hàm để gửi message tới Kafka Topic
     """
-    producer.send(topic, value=message.encode('utf-8'))
-    producer.flush()
+    producer.produce(topic, message.encode('utf-8'), callback=delivery_report)
+    producer.poll(0)
 
 def read_csv_and_send_to_kafka(csv_file_path, producer, topic):
     """
@@ -33,6 +45,9 @@ def read_csv_and_send_to_kafka(csv_file_path, producer, topic):
             send_to_kafka(producer, topic, message)
             print(f"Sent: {message}")
             time.sleep(1)
+    
+    # Wait for all messages to be delivered
+    producer.flush()
 
 if __name__ == '__main__':
     read_csv_and_send_to_kafka(csv_file_path, producer, topic_name)
