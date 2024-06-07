@@ -21,7 +21,7 @@ def delivery_report(err, msg):
     if err is not None:
         print(f"Message delivery failed: {err}")
     else:
-        print(f"Message delivered to {msg.topic()} [{msg.partition()}]")
+        print(f"Message delivered to {msg.topic()}, partition[{msg.partition()}]")
 
 def send_to_kafka(producer, topic, message):
     """
@@ -37,16 +37,13 @@ def read_csv_and_send_to_kafka(csv_file_path, producer, topic):
     with open(csv_file_path, 'r') as csvfile:
         csvreader = csv.reader(csvfile)
         
-        # Bỏ qua header nếu có
-        # next(csvreader)
-        
         for row in csvreader:
             message = ','.join(row)
             send_to_kafka(producer, topic, message)
             print(f"Sent: {message}")
-            time.sleep(1)
+            time.sleep(0.01)
     
-    # Wait for all messages to be delivered
+    # Đảm bảo tất cả các message được gửi đi
     producer.flush()
 
 if __name__ == '__main__':
