@@ -1,0 +1,299 @@
+date,student_code,student_name,activity,totalFile
+20240610,1,Mai Đức An,read,25
+20240610,1,Mai Đức An,write,6
+20240611,1,Mai Đức An,execute,3
+20240611,1,Mai Đức An,read,11
+20240612,1,Mai Đức An,execute,10
+20240613,1,Mai Đức An,read,14
+20240613,1,Mai Đức An,write,10
+20240614,1,Mai Đức An,write,4
+20240615,1,Mai Đức An,read,7
+20240611,2,Nguyễn Mai Anh,write,1
+20240612,2,Nguyễn Mai Anh,execute,1
+20240612,2,Nguyễn Mai Anh,write,19
+20240613,2,Nguyễn Mai Anh,read,3
+20240615,2,Nguyễn Mai Anh,write,2
+20240610,3,Ngô Ngọc Tuấn Anh,execute,4
+20240610,3,Ngô Ngọc Tuấn Anh,write,8
+20240612,3,Ngô Ngọc Tuấn Anh,execute,9
+20240612,3,Ngô Ngọc Tuấn Anh,write,2
+20240613,3,Ngô Ngọc Tuấn Anh,execute,9
+20240613,3,Ngô Ngọc Tuấn Anh,read,18
+20240613,3,Ngô Ngọc Tuấn Anh,write,3
+20240615,3,Ngô Ngọc Tuấn Anh,read,24
+20240610,4,Trần Trung Anh,read,14
+20240610,4,Trần Trung Anh,write,10
+20240611,4,Trần Trung Anh,execute,7
+20240613,4,Trần Trung Anh,execute,8
+20240613,4,Trần Trung Anh,read,3
+20240613,4,Trần Trung Anh,write,7
+20240614,4,Trần Trung Anh,execute,2
+20240614,4,Trần Trung Anh,read,5
+20240610,5,Trần Ngọc Bảo,execute,5
+20240611,5,Trần Ngọc Bảo,write,4
+20240612,5,Trần Ngọc Bảo,execute,9
+20240612,5,Trần Ngọc Bảo,read,6
+20240613,5,Trần Ngọc Bảo,execute,6
+20240613,5,Trần Ngọc Bảo,write,8
+20240614,5,Trần Ngọc Bảo,execute,12
+20240614,5,Trần Ngọc Bảo,read,1
+20240614,5,Trần Ngọc Bảo,write,7
+20240615,5,Trần Ngọc Bảo,execute,5
+20240610,6,Nguyễn Vũ Hòa Bình,read,5
+20240611,6,Nguyễn Vũ Hòa Bình,execute,1
+20240611,6,Nguyễn Vũ Hòa Bình,write,11
+20240613,6,Nguyễn Vũ Hòa Bình,read,3
+20240613,6,Nguyễn Vũ Hòa Bình,write,18
+20240614,6,Nguyễn Vũ Hòa Bình,execute,1
+20240615,6,Nguyễn Vũ Hòa Bình,read,6
+20240615,6,Nguyễn Vũ Hòa Bình,write,13
+20240611,7,Nguyễn Thành Đạt,execute,10
+20240613,7,Nguyễn Thành Đạt,read,10
+20240614,7,Nguyễn Thành Đạt,read,7
+20240615,7,Nguyễn Thành Đạt,read,1
+20240610,8,Đỗ Thành Đạt,read,15
+20240610,8,Đỗ Thành Đạt,write,14
+20240611,8,Đỗ Thành Đạt,execute,6
+20240612,8,Đỗ Thành Đạt,read,3
+20240613,8,Đỗ Thành Đạt,execute,1
+20240613,8,Đỗ Thành Đạt,write,4
+20240614,8,Đỗ Thành Đạt,execute,6
+20240614,8,Đỗ Thành Đạt,read,12
+20240614,8,Đỗ Thành Đạt,write,5
+20240615,8,Đỗ Thành Đạt,read,13
+20240611,9,Nguyễn Khoa Đoàn,write,1
+20240612,9,Nguyễn Khoa Đoàn,execute,4
+20240612,9,Nguyễn Khoa Đoàn,write,8
+20240613,9,Nguyễn Khoa Đoàn,read,1
+20240613,9,Nguyễn Khoa Đoàn,write,7
+20240614,9,Nguyễn Khoa Đoàn,execute,1
+20240610,10,Nguyễn Quốc Dũng,write,5
+20240611,10,Nguyễn Quốc Dũng,execute,4
+20240612,10,Nguyễn Quốc Dũng,read,8
+20240613,10,Nguyễn Quốc Dũng,write,7
+20240614,10,Nguyễn Quốc Dũng,execute,2
+20240614,10,Nguyễn Quốc Dũng,write,8
+20240615,10,Nguyễn Quốc Dũng,read,9
+20240615,10,Nguyễn Quốc Dũng,write,2
+20240610,11,Đường Minh Quân,execute,4
+20240610,11,Đường Minh Quân,write,5
+20240611,11,Đường Minh Quân,execute,5
+20240611,11,Đường Minh Quân,write,7
+20240612,11,Đường Minh Quân,read,8
+20240613,11,Đường Minh Quân,execute,17
+20240613,11,Đường Minh Quân,read,10
+20240613,11,Đường Minh Quân,write,4
+20240614,11,Đường Minh Quân,execute,6
+20240614,11,Đường Minh Quân,write,5
+20240615,11,Đường Minh Quân,execute,1
+20240615,11,Đường Minh Quân,write,7
+20240610,12,Dương Quang Giang,read,8
+20240611,12,Dương Quang Giang,execute,16
+20240612,12,Dương Quang Giang,execute,9
+20240612,12,Dương Quang Giang,read,8
+20240614,12,Dương Quang Giang,read,5
+20240610,13,Nguyễn Minh Hiếu,read,8
+20240611,13,Nguyễn Minh Hiếu,write,8
+20240612,13,Nguyễn Minh Hiếu,read,4
+20240612,13,Nguyễn Minh Hiếu,write,10
+20240613,13,Nguyễn Minh Hiếu,write,8
+20240614,13,Nguyễn Minh Hiếu,execute,26
+20240615,13,Nguyễn Minh Hiếu,write,12
+20240611,14,Ngô Phi Hùng,execute,12
+20240611,14,Ngô Phi Hùng,write,18
+20240612,14,Ngô Phi Hùng,execute,4
+20240614,14,Ngô Phi Hùng,write,8
+20240610,15,Nguyễn Đình Thiên Huy,read,1
+20240610,15,Nguyễn Đình Thiên Huy,write,8
+20240613,15,Nguyễn Đình Thiên Huy,read,3
+20240613,15,Nguyễn Đình Thiên Huy,write,3
+20240614,15,Nguyễn Đình Thiên Huy,read,1
+20240615,15,Nguyễn Đình Thiên Huy,read,10
+20240610,16,Đỗ Doãn Khắc,read,6
+20240610,16,Đỗ Doãn Khắc,write,1
+20240612,16,Đỗ Doãn Khắc,execute,7
+20240612,16,Đỗ Doãn Khắc,read,2
+20240613,16,Đỗ Doãn Khắc,execute,9
+20240613,16,Đỗ Doãn Khắc,read,16
+20240614,16,Đỗ Doãn Khắc,execute,9
+20240614,16,Đỗ Doãn Khắc,read,10
+20240610,17,Châu Minh Khải,execute,14
+20240610,17,Châu Minh Khải,read,6
+20240612,17,Châu Minh Khải,execute,3
+20240612,17,Châu Minh Khải,read,15
+20240612,17,Châu Minh Khải,write,3
+20240613,17,Châu Minh Khải,execute,13
+20240613,17,Châu Minh Khải,read,1
+20240613,17,Châu Minh Khải,write,4
+20240614,17,Châu Minh Khải,execute,8
+20240615,17,Châu Minh Khải,execute,2
+20240615,17,Châu Minh Khải,write,1
+20240610,18,Phạm Đình Khôi,read,15
+20240610,18,Phạm Đình Khôi,write,1
+20240611,18,Phạm Đình Khôi,write,7
+20240612,18,Phạm Đình Khôi,read,6
+20240613,18,Phạm Đình Khôi,read,8
+20240614,18,Phạm Đình Khôi,read,5
+20240614,18,Phạm Đình Khôi,write,5
+20240610,19,Lê Bảo Khánh,execute,3
+20240611,19,Lê Bảo Khánh,read,9
+20240611,19,Lê Bảo Khánh,write,18
+20240612,19,Lê Bảo Khánh,execute,4
+20240612,19,Lê Bảo Khánh,write,11
+20240614,19,Lê Bảo Khánh,execute,5
+20240614,19,Lê Bảo Khánh,read,1
+20240615,19,Lê Bảo Khánh,execute,15
+20240615,19,Lê Bảo Khánh,read,5
+20240615,19,Lê Bảo Khánh,write,4
+20240611,20,Lê Minh Phúc,read,6
+20240611,20,Lê Minh Phúc,write,5
+20240612,20,Lê Minh Phúc,read,4
+20240613,20,Lê Minh Phúc,write,9
+20240614,20,Lê Minh Phúc,write,13
+20240615,20,Lê Minh Phúc,execute,8
+20240615,20,Lê Minh Phúc,read,5
+20240611,21,Trần Phúc Mạnh Linh,execute,10
+20240611,21,Trần Phúc Mạnh Linh,write,4
+20240612,21,Trần Phúc Mạnh Linh,execute,15
+20240612,21,Trần Phúc Mạnh Linh,read,5
+20240612,21,Trần Phúc Mạnh Linh,write,9
+20240614,21,Trần Phúc Mạnh Linh,read,10
+20240615,21,Trần Phúc Mạnh Linh,execute,19
+20240615,21,Trần Phúc Mạnh Linh,read,1
+20240610,22,Huỳnh Tấn Lộc,execute,6
+20240610,22,Huỳnh Tấn Lộc,read,11
+20240612,22,Huỳnh Tấn Lộc,write,2
+20240614,22,Huỳnh Tấn Lộc,write,9
+20240615,22,Huỳnh Tấn Lộc,write,13
+20240611,23,Nguyễn Địch Nhật Minh,execute,2
+20240612,23,Nguyễn Địch Nhật Minh,write,8
+20240613,23,Nguyễn Địch Nhật Minh,write,12
+20240614,23,Nguyễn Địch Nhật Minh,execute,5
+20240614,23,Nguyễn Địch Nhật Minh,read,4
+20240615,23,Nguyễn Địch Nhật Minh,execute,16
+20240615,23,Nguyễn Địch Nhật Minh,write,4
+20240610,24,Nguyễn Hoài Nam,execute,10
+20240610,24,Nguyễn Hoài Nam,write,10
+20240611,24,Nguyễn Hoài Nam,write,6
+20240612,24,Nguyễn Hoài Nam,execute,18
+20240612,24,Nguyễn Hoài Nam,read,12
+20240613,24,Nguyễn Hoài Nam,write,8
+20240614,24,Nguyễn Hoài Nam,execute,8
+20240614,24,Nguyễn Hoài Nam,read,8
+20240615,24,Nguyễn Hoài Nam,write,16
+20240610,25,Đào Thanh Nguyên,execute,5
+20240610,25,Đào Thanh Nguyên,read,12
+20240610,25,Đào Thanh Nguyên,write,5
+20240611,25,Đào Thanh Nguyên,write,12
+20240612,25,Đào Thanh Nguyên,execute,9
+20240612,25,Đào Thanh Nguyên,write,4
+20240613,25,Đào Thanh Nguyên,execute,6
+20240613,25,Đào Thanh Nguyên,read,3
+20240613,25,Đào Thanh Nguyên,write,8
+20240614,25,Đào Thanh Nguyên,execute,15
+20240610,26,Nguyễn Duy Hưng,execute,2
+20240611,26,Nguyễn Duy Hưng,read,4
+20240612,26,Nguyễn Duy Hưng,read,6
+20240612,26,Nguyễn Duy Hưng,write,4
+20240613,26,Nguyễn Duy Hưng,execute,8
+20240614,26,Nguyễn Duy Hưng,execute,8
+20240610,27,Nguyễn Thị Thùy Trang,execute,1
+20240610,27,Nguyễn Thị Thùy Trang,write,1
+20240611,27,Nguyễn Thị Thùy Trang,write,7
+20240612,27,Nguyễn Thị Thùy Trang,execute,10
+20240613,27,Nguyễn Thị Thùy Trang,read,1
+20240614,27,Nguyễn Thị Thùy Trang,write,7
+20240615,27,Nguyễn Thị Thùy Trang,read,9
+20240610,28,Lương Thị Mai Phương,execute,1
+20240612,28,Lương Thị Mai Phương,write,9
+20240613,28,Lương Thị Mai Phương,execute,3
+20240613,28,Lương Thị Mai Phương,write,10
+20240614,28,Lương Thị Mai Phương,execute,15
+20240614,28,Lương Thị Mai Phương,read,14
+20240610,29,Nguyễn Minh Quân,write,9
+20240611,29,Nguyễn Minh Quân,read,10
+20240612,29,Nguyễn Minh Quân,write,6
+20240615,29,Nguyễn Minh Quân,execute,7
+20240610,30,Phùng Huy Quang,read,1
+20240610,30,Phùng Huy Quang,write,6
+20240611,30,Phùng Huy Quang,execute,4
+20240612,30,Phùng Huy Quang,read,12
+20240612,30,Phùng Huy Quang,write,1
+20240613,30,Phùng Huy Quang,read,7
+20240613,30,Phùng Huy Quang,write,6
+20240614,30,Phùng Huy Quang,execute,10
+20240614,30,Phùng Huy Quang,read,6
+20240615,30,Phùng Huy Quang,execute,4
+20240610,31,Tạ Đức Tiến,execute,4
+20240610,31,Tạ Đức Tiến,read,9
+20240611,31,Tạ Đức Tiến,read,1
+20240612,31,Tạ Đức Tiến,read,2
+20240612,31,Tạ Đức Tiến,write,5
+20240613,31,Tạ Đức Tiến,execute,10
+20240613,31,Tạ Đức Tiến,read,12
+20240613,31,Tạ Đức Tiến,write,11
+20240614,31,Tạ Đức Tiến,execute,5
+20240614,31,Tạ Đức Tiến,read,9
+20240615,31,Tạ Đức Tiến,execute,9
+20240610,32,Đinh Việt Thành,execute,5
+20240611,32,Đinh Việt Thành,execute,16
+20240611,32,Đinh Việt Thành,read,7
+20240614,32,Đinh Việt Thành,read,7
+20240615,32,Đinh Việt Thành,execute,10
+20240610,33,Nguyễn Bá Thiêm,execute,1
+20240610,33,Nguyễn Bá Thiêm,write,6
+20240611,33,Nguyễn Bá Thiêm,execute,6
+20240611,33,Nguyễn Bá Thiêm,write,9
+20240612,33,Nguyễn Bá Thiêm,read,5
+20240613,33,Nguyễn Bá Thiêm,execute,1
+20240615,33,Nguyễn Bá Thiêm,read,4
+20240615,33,Nguyễn Bá Thiêm,write,10
+20240611,34,Huỳnh Minh Tú,execute,10
+20240611,34,Huỳnh Minh Tú,write,10
+20240612,34,Huỳnh Minh Tú,read,6
+20240613,34,Huỳnh Minh Tú,execute,4
+20240613,34,Huỳnh Minh Tú,read,11
+20240613,34,Huỳnh Minh Tú,write,9
+20240615,34,Huỳnh Minh Tú,read,1
+20240610,35,Nguyễn Minh Tuấn,execute,13
+20240610,35,Nguyễn Minh Tuấn,write,4
+20240611,35,Nguyễn Minh Tuấn,write,5
+20240613,35,Nguyễn Minh Tuấn,write,5
+20240615,35,Nguyễn Minh Tuấn,write,10
+20240610,36,Vũ Khắc Long,execute,13
+20240610,36,Vũ Khắc Long,read,11
+20240611,36,Vũ Khắc Long,execute,3
+20240611,36,Vũ Khắc Long,read,1
+20240612,36,Vũ Khắc Long,execute,11
+20240613,36,Vũ Khắc Long,write,6
+20240614,36,Vũ Khắc Long,read,5
+20240614,36,Vũ Khắc Long,write,10
+20240615,36,Vũ Khắc Long,read,4
+20240610,37,Đào Anh Vũ,execute,9
+20240610,37,Đào Anh Vũ,read,8
+20240610,37,Đào Anh Vũ,write,5
+20240611,37,Đào Anh Vũ,read,10
+20240611,37,Đào Anh Vũ,write,7
+20240612,37,Đào Anh Vũ,execute,9
+20240613,37,Đào Anh Vũ,execute,1
+20240615,37,Đào Anh Vũ,execute,6
+20240615,37,Đào Anh Vũ,read,10
+20240610,38,Vũ Hữu Sỹ,execute,6
+20240610,38,Vũ Hữu Sỹ,read,4
+20240611,38,Vũ Hữu Sỹ,execute,9
+20240611,38,Vũ Hữu Sỹ,write,3
+20240612,38,Vũ Hữu Sỹ,read,4
+20240613,38,Vũ Hữu Sỹ,execute,7
+20240614,38,Vũ Hữu Sỹ,read,5
+20240615,38,Vũ Hữu Sỹ,execute,9
+20240610,39,Huỳnh Đoan Hồ,execute,14
+20240610,39,Huỳnh Đoan Hồ,write,1
+20240611,39,Huỳnh Đoan Hồ,read,8
+20240611,39,Huỳnh Đoan Hồ,write,4
+20240612,39,Huỳnh Đoan Hồ,execute,7
+20240612,39,Huỳnh Đoan Hồ,read,7
+20240613,39,Huỳnh Đoan Hồ,execute,6
+20240614,39,Huỳnh Đoan Hồ,read,9
+20240614,39,Huỳnh Đoan Hồ,write,3
+20240615,39,Huỳnh Đoan Hồ,execute,13
+20240615,39,Huỳnh Đoan Hồ,write,7
