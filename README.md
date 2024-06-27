@@ -2,6 +2,8 @@
 
 A simple data platform consisting of components: Kafka, NiFi, Hadoop, Spark.
 
+![tsdfsdf](https://github.com/vuhuusy/data-flow/blob/main/data-platform.png)
+
 ## Project Instructions
 
 Install the project requirements on your choice of operating system, including:
